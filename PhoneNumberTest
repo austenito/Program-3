@@ -1,0 +1,146 @@
+// cmatsunaga17@georgefox.edu
+// Program 3
+// 2018-09-27
+
+
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.CoreMatchers.*;
+import org.junit.*;
+
+public class PhoneNumberTest
+{
+   private static final String VALID_AREA_CODE = "808";
+   private static final String VALID_PREFIX = "469";
+   private static final String VALID_LINE_NUMBER = "2711";
+   
+   private static final String VALID_AREA_CODE2 = "908";
+   private static final String VALID_PREFIX2 = "567";
+   private static final String VALID_LINE_NUMBER2 = "8564";
+   
+   private static final String INVALID_AREA_CODE = "01H";
+   private static final String INVALID_PREFIX = "123";
+   private static final String INVALID_LINE_NUMBER = "2711";
+   
+   private static final String VALID_DIGITS = 
+         VALID_AREA_CODE + VALID_PREFIX + VALID_LINE_NUMBER;
+
+   private static final String VALID_TO_STRING = 
+        VALID_AREA_CODE + "-" + VALID_PREFIX + "-" + VALID_LINE_NUMBER;
+   private static final String INVALID_TO_STRING = INVALID_AREA_CODE +
+         "-" + INVALID_PREFIX + "-" + INVALID_LINE_NUMBER;
+
+   private static final int COMPARE_EQUAL = 0;
+   
+   private static PhoneNumber _phoneNumber;
+
+   public static void main(String[] args)
+   {
+      org.junit.runner.JUnitCore.main("PhoneNumberTest");
+   }
+   
+   @BeforeClass
+   public static void setUp()
+   {
+      _phoneNumber = new PhoneNumber(VALID_AREA_CODE, VALID_PREFIX,
+            VALID_LINE_NUMBER);
+   }
+   
+   @Test
+   public void test_PhoneNumber()
+   {
+      assertThat(_phoneNumber, notNullValue());
+      assertThat(_phoneNumber, instanceOf(PhoneNumber.class));
+   }
+   
+   @Test (expected = IllegalArgumentException.class)
+   public void test_invalidPhoneNumber()
+   {
+      new PhoneNumber(INVALID_AREA_CODE, INVALID_PREFIX,
+            INVALID_LINE_NUMBER);
+   }
+   
+   @Test
+   public void test_PhoneNumber_getAreaCode()
+   {
+      assertThat(_phoneNumber.getAreaCode(), equalTo(VALID_AREA_CODE));
+   }
+   
+   @Test
+   public void test_PhoneNumber_getPrefix()
+   {
+      assertThat(_phoneNumber.getPrefix(), equalTo(VALID_PREFIX));
+   }
+   
+   @Test
+   public void test_PhoneNumber_getLineNumber()
+   {
+      assertThat(_phoneNumber.getLineNumber(),
+            equalTo(VALID_LINE_NUMBER));
+   }
+   
+   @Test
+   public void test_PhoneNumber_getDigits()
+   {
+      assertThat(_phoneNumber.getDigits(), equalTo(VALID_DIGITS));
+   }
+   
+   @Test
+   public void test_PhoneNumber_toString()
+   {
+      assertThat(_phoneNumber.toString(), equalTo(VALID_TO_STRING));
+   }
+   
+   @Test
+   public void test_PhoneNumber_compareTo()
+   {
+      PhoneNumber p1 = new PhoneNumber(VALID_AREA_CODE, VALID_PREFIX,
+            VALID_LINE_NUMBER);
+      PhoneNumber p2 = new PhoneNumber(VALID_AREA_CODE2, VALID_PREFIX2,
+            VALID_LINE_NUMBER2);
+      assertThat(p1.compareTo(p1), equalTo(COMPARE_EQUAL));
+      assertThat("compare, positive value", p2.compareTo(p1) > 0);
+      assertThat("compare, negative value", p1.compareTo(p2) < 0);
+   }
+   
+   @Test
+   public void test_PhoneNumber_isValidPhoneNumber()
+   {
+      assertThat(PhoneNumber.isValidPhoneNumber(VALID_AREA_CODE,
+            VALID_PREFIX, VALID_LINE_NUMBER), equalTo(true));
+   }
+   
+   @Test
+   public void test_PhoneNumber_isValidPhoneNumber_False()
+   {
+      assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE,
+            INVALID_PREFIX, INVALID_LINE_NUMBER), equalTo(false));
+   }
+   
+   @Test
+   public void test_isValidPhoneNumber_null()
+   {
+      assertThat(PhoneNumber.isValidPhoneNumber(null, null, null),
+            equalTo(false));
+   }
+   
+   @Test
+   public void test_PhoneNumber_parsePhoneNumber()
+   {
+      PhoneNumber p1 = PhoneNumber.parsePhoneNumber(VALID_TO_STRING);
+      assertThat(p1.getAreaCode(), equalTo(VALID_AREA_CODE));
+      assertThat(p1.getPrefix(), equalTo(VALID_PREFIX));
+      assertThat(p1.getLineNumber(), equalTo(VALID_LINE_NUMBER));
+   }
+   
+   @Test (expected = IllegalArgumentException.class)
+   public void test_parsePhoneNumber_null()
+   {
+      PhoneNumber.parsePhoneNumber(null);
+   }
+   
+   @Test (expected = IllegalArgumentException.class)
+   public void test_parsePhoneNumber_IllegalArgumentException()
+   {
+      PhoneNumber.parsePhoneNumber(INVALID_TO_STRING);
+   }
+}
