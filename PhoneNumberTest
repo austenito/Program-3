@@ -1,41 +1,55 @@
+// cmatsunaga17@georgefox.edu
+// Program 3
+// 2018-09-27
+
+
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.*;
 
+/**
+ * This is a PhoneNumberTest class that tests the PhoneNumber class.
+ *
+ * @author cmatsunaga17@georgefox.edu
+ *
+ */
 public class PhoneNumberTest
 {
+   // Valid parts of a phone number
    private static final String VALID_AREA_CODE = "808";
    private static final String VALID_PREFIX = "469";
    private static final String VALID_LINE_NUMBER = "2711";
-   
+
+   // More valid parts of a phone number (used in compareTo test)
    private static final String VALID_AREA_CODE2 = "908";
    private static final String VALID_PREFIX2 = "567";
    private static final String VALID_LINE_NUMBER2 = "8564";
-   
+
+   // Invalid parts of a phone number
    private static final String INVALID_AREA_CODE = "012";
    private static final String INVALID_PREFIX = "12@!3";
-   private static final String INVALID_LINE_NUMBER = "27115";
-   
-   // what if wanted to test various invalid phone numbers
-   // length off, letters added, etc.
-   
+   private static final String INVALID_LINE_NUMBER = "47115";
+
+   // Valid phone number digits String
    private static final String VALID_DIGITS = 
          VALID_AREA_CODE + VALID_PREFIX + VALID_LINE_NUMBER;
 
-   private static final String VALID_TO_STRING = 
+   // Valid and invalid Strings for phone number (formatted with dashes)
+   private static final String VALID_TO_STRING =
         VALID_AREA_CODE + "-" + VALID_PREFIX + "-" + VALID_LINE_NUMBER;
    private static final String INVALID_TO_STRING = INVALID_AREA_CODE +
          "-" + INVALID_PREFIX + "-" + INVALID_LINE_NUMBER;
 
+   // Constant used in compareTo method
    private static final int COMPARE_EQUAL = 0;
-   
+
    private static PhoneNumber _phoneNumber;
 
    public static void main(String[] args)
    {
       org.junit.runner.JUnitCore.main("PhoneNumberTest");
    }
-   
+
    /**
     * Valid values for area code, prefix, and line number are passed
     * into the constructor to create an object _phoneNumber to be used.
@@ -46,7 +60,7 @@ public class PhoneNumberTest
       _phoneNumber = new PhoneNumber(VALID_AREA_CODE, VALID_PREFIX,
             VALID_LINE_NUMBER);
    }
-   
+
    /**
     * Tests the PhoneNumber constructor to ensure that the _phoneNumber
     * created is an instance of the PhoneNumber class.
@@ -56,25 +70,105 @@ public class PhoneNumberTest
    {
       assertThat(_phoneNumber, instanceOf(PhoneNumber.class));
    }
-   
+
    /**
     * Tests the PhoneNumber constructor to ensure that if all parts of
     * the phone number are invalid, this will throw an Illegal Argument
     * Exception and a new instance of PhoneNumber will not be made.
+    *
+    * All parts (area code, prefix, line number) invalid
     */
    @Test (expected = IllegalArgumentException.class)
    public void test_PhoneNumber_invalid()
    {
-      /*new PhoneNumber(INVALID_AREA_CODE, INVALID_PREFIX,
-            INVALID_LINE_NUMBER); */
-      // need to pass in if any part is invalid?
-      new PhoneNumber(INVALID_AREA_CODE, VALID_PREFIX,
-            VALID_LINE_NUMBER);     // DOESN'T WORK BY ITSELF
-      
-      // continue more below, or does isValidPhoneNumber cover it?
-      // change javadoc if changed
+      new PhoneNumber(INVALID_AREA_CODE, INVALID_PREFIX,
+            INVALID_LINE_NUMBER);
    }
-   
+
+   /**
+    * Tests the PhoneNumber constructor to ensure that if any part of
+    * the phone number is invalid, it will throw an Illegal Argument
+    * Exception and a new instance of PhoneNumber will not be made.
+    *
+    * Invalid area code
+    */
+   @Test (expected = IllegalArgumentException.class)
+   public void test_PhoneNumber_invalidAreaCode()
+   {
+      new PhoneNumber(INVALID_AREA_CODE, VALID_PREFIX,
+            VALID_LINE_NUMBER);
+   }
+
+   /**
+    * Tests the PhoneNumber constructor to ensure that if any part of
+    * the phone number is invalid, it will throw an Illegal Argument
+    * Exception and a new instance of PhoneNumber will not be made.
+    *
+    * Invalid prefix
+    */
+   @Test (expected = IllegalArgumentException.class)
+   public void test_PhoneNumber_invalidPrefix()
+   {
+      new PhoneNumber(VALID_AREA_CODE, INVALID_PREFIX,
+            VALID_LINE_NUMBER);
+   }
+
+   /**
+    * Tests the PhoneNumber constructor to ensure that if any part of
+    * the phone number is invalid, it will throw an Illegal Argument
+    * Exception and a new instance of PhoneNumber will not be made.
+    *
+    * Invalid line number
+    */
+   @Test (expected = IllegalArgumentException.class)
+   public void test_PhoneNumber_invalidLineNumber()
+   {
+      new PhoneNumber(VALID_AREA_CODE, VALID_PREFIX,
+            INVALID_LINE_NUMBER);
+   }
+
+   /**
+    * Tests the PhoneNumber constructor to ensure that if parts of
+    * the phone number are invalid, it will throw an Illegal Argument
+    * Exception and a new instance of PhoneNumber will not be made.
+    *
+    * Invalid area code and prefix
+    */
+   @Test (expected = IllegalArgumentException.class)
+   public void test_PhoneNumber_invalidAreaCodePrefix()
+   {
+      new PhoneNumber(INVALID_AREA_CODE, INVALID_PREFIX,
+            VALID_LINE_NUMBER);
+   }
+
+   /**
+    * Tests the PhoneNumber constructor to ensure that if parts of
+    * the phone number are invalid, it will throw an Illegal Argument
+    * Exception and a new instance of PhoneNumber will not be made.
+    *
+    * Invalid area code and line number
+    */
+   @Test (expected = IllegalArgumentException.class)
+   public void test_PhoneNumber_invalidAreaCodeLineNumber()
+   {
+      new PhoneNumber(INVALID_AREA_CODE, VALID_PREFIX,
+            INVALID_LINE_NUMBER);
+   }
+
+   /**
+    * Tests the PhoneNumber constructor to ensure that if parts of
+    * the phone number are invalid, it will throw an Illegal Argument
+    * Exception and a new instance of PhoneNumber will not be made.
+    *
+    * Invalid prefix and line number
+    */
+   @Test (expected = IllegalArgumentException.class)
+   public void test_PhoneNumber_invalidPrefixLineNumber()
+   {
+      new PhoneNumber(VALID_AREA_CODE, INVALID_PREFIX,
+            INVALID_LINE_NUMBER);
+   }
+
    /**
     * Tests the getAreaCode() method to ensure that it returns a valid
     * area code.
@@ -84,7 +178,7 @@ public class PhoneNumberTest
    {
       assertThat(_phoneNumber.getAreaCode(), equalTo(VALID_AREA_CODE));
    }
-   
+
    /**
     * Tests the getPrefix() method to ensure that it returns a valid
     * prefix.
@@ -94,7 +188,7 @@ public class PhoneNumberTest
    {
       assertThat(_phoneNumber.getPrefix(), equalTo(VALID_PREFIX));
    }
-   
+
    /**
     * Tests the getLineNumber() method to ensure that it returns a
     * valid line number.
@@ -105,7 +199,7 @@ public class PhoneNumberTest
       assertThat(_phoneNumber.getLineNumber(),
             equalTo(VALID_LINE_NUMBER));
    }
-   
+
    /**
     * Tests the getDigits() method to ensure that it returns a valid
     * String of the digits in the phone number.
@@ -115,7 +209,7 @@ public class PhoneNumberTest
    {
       assertThat(_phoneNumber.getDigits(), equalTo(VALID_DIGITS));
    }
-   
+
    /**
     * Tests the toString() method to ensure that it returns a valid
     * String of the digits formatted correctly (dashes between parts).
@@ -125,7 +219,7 @@ public class PhoneNumberTest
    {
       assertThat(_phoneNumber.toString(), equalTo(VALID_TO_STRING));
    }
-   
+
    /**
     * Tests the compareTo() method to ensure that when two phone numbers
     * are equal (the same), the method returns an integer value of 0.
@@ -137,7 +231,7 @@ public class PhoneNumberTest
             VALID_LINE_NUMBER);
       assertThat(p1.compareTo(p1), equalTo(COMPARE_EQUAL));
    }
-   
+
    /**
     * Tests the compareTo() method to ensure that when the first phone
     * number is lexicographically greater than the second phone number,
@@ -152,7 +246,7 @@ public class PhoneNumberTest
             VALID_LINE_NUMBER2);
       assertThat("compare, positive value", p2.compareTo(p1) > 0);
    }
-   
+
    /**
     * Tests the compareTo() method to ensure that when the second phone
     * number is lexicographically greater than the first phone number,
@@ -167,7 +261,7 @@ public class PhoneNumberTest
             VALID_LINE_NUMBER2);
       assertThat("compare, negative value", p1.compareTo(p2) < 0);
    }
-   
+
    /**
     * Tests the isValidPhoneNumber() method to ensure than if all the
     * parts of the phone number are valid, the method returns true.
@@ -178,7 +272,7 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(VALID_AREA_CODE,
             VALID_PREFIX, VALID_LINE_NUMBER), equalTo(true));
    }
-   
+
    /**
     * Tests the isValidPhoneNumber() method to ensure that if none of
     * the parts of the phone number are valid (all invalid), the method
@@ -190,7 +284,7 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE,
             INVALID_PREFIX, INVALID_LINE_NUMBER), equalTo(false));
    }
-   
+
    /**
     * Tests the isValidPhoneNumber() method to ensure that if all parts
     * of the phone number are null, the method returns false.
@@ -201,13 +295,15 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(null, null, null),
             equalTo(false));
    }
-   
-   // Testing if one part of the phone number is valid. 
-   
+
+   // Testing when one part of the number is valid, two are invalid.
+
    /**
-    * Tests the isValidPhoneNumber() method to ensure that if the area
-    * code is valid, but the other two parts are invalid, the method
-    * returns false.
+    * Tests the isValidPhoneNumber() method to ensure that if any part
+    * of the phone number passed in is invalid, the method will return
+    * false.
+    *
+    * Valid area code, invalid prefix and line number
     */
    @Test
    public void test_isValidPhoneNumber_validAreaCode()
@@ -215,48 +311,87 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(VALID_AREA_CODE,
             INVALID_PREFIX, INVALID_LINE_NUMBER), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if any part
+    * of the phone number passed in is invalid, the method will return
+    * false.
+    *
+    * Valid prefix, invalid area code and line number
+    */
    @Test
    public void test_isValidPhoneNumber_validPrefix()
    {
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE,
             VALID_PREFIX, INVALID_LINE_NUMBER), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if any part
+    * of the phone number passed in is invalid, the method will return
+    * false.
+    *
+    * Valid line number, invalid area code and prefix
+    */
    @Test
    public void test_isValidPhoneNumber_validLineNumber()
    {
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE,
             INVALID_PREFIX, VALID_LINE_NUMBER), equalTo(false));
    }
-   
-   // Testing if one part of the phone number is invalid.
-   
+
+   // Testing when one part of the number is invalid, two are valid.
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if even one
+    * part of the phone number is invalid, the method will return false.
+    *
+    * Invalid area code, valid prefix and line number
+    */
    @Test
    public void test_isValidPhoneNumber_inValidAreaCode()
    {
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE,
             VALID_PREFIX, VALID_LINE_NUMBER), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if even one
+    * part of the phone number is invalid, the method will return false.
+    *
+    * Invalid prefix, valid area code and line number
+    */
    @Test
    public void test_isValidPhoneNumber_invalidPrefix()
    {
       assertThat(PhoneNumber.isValidPhoneNumber(VALID_AREA_CODE,
             INVALID_PREFIX, VALID_LINE_NUMBER), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if even one
+    * part of the phone number is invalid, the method will return false.
+    *
+    * Invalid line number, valid area code and prefix
+    */
    @Test
    public void test_isValidPhoneNumber_invalidLineNumber()
    {
       assertThat(PhoneNumber.isValidPhoneNumber(VALID_AREA_CODE,
             VALID_PREFIX, INVALID_LINE_NUMBER), equalTo(false));
    }
-   
-   // Testing if any part of the phone number is null, also switching
-   // between valid/invalid for the parts of the phone number that are
-   // not null.
-   
+
+   // Testing when one part of the number is null
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if even one
+    * part of the phone number is null, the method will return false.
+    *
+    * Switching between valid and invalid for the parts of the phone
+    * number that are not null.
+    *
+    * Null area code
+    */
    @Test
    public void test_isValidPhoneNumber_nullAreaCode()
    {
@@ -269,7 +404,16 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(null, INVALID_PREFIX,
             INVALID_LINE_NUMBER), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if even one
+    * part of the phone number is null, the method will return false.
+    *
+    * Switching between valid and invalid for the parts of the phone
+    * number that are not null.
+    *
+    * Null prefix
+    */
    @Test
    public void test_isValidPhoneNumber_nullPrefix()
    {
@@ -282,7 +426,16 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE, null,
             INVALID_LINE_NUMBER), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if even one
+    * part of the phone number is null, the method will return false.
+    *
+    * Switching between valid and invalid for the parts of the phone
+    * number that are not null.
+    *
+    * Null line number
+    */
    @Test
    public void test_isValidPhoneNumber_nullLineNumber()
    {
@@ -295,11 +448,18 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE,
             INVALID_PREFIX, null), equalTo(false));
    }
-   
-   // Testing if two parts of the phone number are null, also switching
-   // between valid/invalid for the part of the phone number that is
-   // not null.
-   
+
+   // Testing when two parts of the number are null
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if parts of
+    * the phone number are null, the method will return false.
+    *
+    * Switching between valid and invalid for the part of the phone
+    * number that is not null.
+    *
+    * Null prefix and line number
+    */
    @Test
    public void test_isValidPhoneNumber_areaCodeNotNull()
    {
@@ -308,7 +468,16 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE, null,
             null), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if parts of
+    * the phone number are null, the method will return false.
+    *
+    * Switching between valid and invalid for the part of the phone
+    * number that is not null.
+    *
+    * Null area code and line number
+    */
    @Test
    public void test_isValidPhoneNumber_prefixNotNull()
    {
@@ -317,7 +486,16 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(null, INVALID_PREFIX,
             null), equalTo(false));
    }
-   
+
+   /**
+    * Tests the isValidPhoneNumber() method to ensure that if parts of
+    * the phone number are null, the method will return false.
+    *
+    * Switching between valid and invalid for the part of the phone
+    * number that is not null.
+    *
+    * Null prefix and line number
+    */
    @Test
    public void test_isValidPhoneNumber_lineNumberNotNull()
    {
@@ -326,7 +504,7 @@ public class PhoneNumberTest
       assertThat(PhoneNumber.isValidPhoneNumber(null, null,
             INVALID_LINE_NUMBER), equalTo(false));
    }
-   
+
    /**
     * Tests the parsePhoneNumber() method to ensure that when given a
     * valid String (formatted with dashes), the method returns an
@@ -343,7 +521,7 @@ public class PhoneNumberTest
       assertThat(p1.getPrefix(), equalTo(VALID_PREFIX));
       assertThat(p1.getLineNumber(), equalTo(VALID_LINE_NUMBER));
    }
-   
+
    /**
     * Tests the parsePhoneNumber() method to ensure that if a null
     * value was passed in, the method would throw an Illegal Argument
@@ -354,7 +532,7 @@ public class PhoneNumberTest
    {
       PhoneNumber.parsePhoneNumber(null);
    }
-   
+
    /**
     * Tests the parsePhoneNumber() method to ensure that if given an
     * invalid String, the method would throw an Illegal Argument
