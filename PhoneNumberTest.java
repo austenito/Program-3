@@ -31,7 +31,7 @@ public class PhoneNumberTest
    private static final String INVALID_LINE_NUMBER = "47115";
 
    // Valid phone number digits String
-   private static final String VALID_DIGITS = 
+   private static final String VALID_DIGITS =
          VALID_AREA_CODE + VALID_PREFIX + VALID_LINE_NUMBER;
 
    // Valid and invalid Strings for phone number (formatted with dashes)
@@ -43,6 +43,7 @@ public class PhoneNumberTest
    // Constant used in compareTo method
    private static final int COMPARE_EQUAL = 0;
 
+   // this doesn't need to be static
    private static PhoneNumber _phoneNumber;
 
    public static void main(String[] args)
@@ -66,6 +67,9 @@ public class PhoneNumberTest
     * created is an instance of the PhoneNumber class.
     */
    @Test
+   // You don't need to test that the java compiler works
+   //
+   // Also why are you using underscores for your method names? Pretty sure java is camel case by convention.
    public void test_PhoneNumber()
    {
       assertThat(_phoneNumber, instanceOf(PhoneNumber.class));
@@ -78,9 +82,23 @@ public class PhoneNumberTest
     *
     * All parts (area code, prefix, line number) invalid
     */
+   // Are you require to document your tests? Just curious cause your test names should reflect what
+   // you're trying to assert
+   //
+   // Are you required to have separate test cases for each invalid permutation? If not, I would just
+   // group them together into one method.
    @Test (expected = IllegalArgumentException.class)
    public void test_PhoneNumber_invalid()
    {
+     // So rather than using one set of constants all over your tests, try to think of different
+     // permutations of invalid parameters and use them in your tests.
+     //
+     // For example, you're missing a test case where the area code starts with a 1.
+     //
+     // As a side note, having constants is OK, but in tests it can make it hard to read. For example,
+     // I was wonder what an invalid area code is rather than just being able to read it inline here:
+     //
+     // new PhoneNumber("123", "123", "poptarts");
       new PhoneNumber(INVALID_AREA_CODE, INVALID_PREFIX,
             INVALID_LINE_NUMBER);
    }
@@ -229,6 +247,7 @@ public class PhoneNumberTest
    {
       PhoneNumber p1 = new PhoneNumber(VALID_AREA_CODE, VALID_PREFIX,
             VALID_LINE_NUMBER);
+      // You're comparing p1 against it self, which isn't what you want to be testing here...
       assertThat(p1.compareTo(p1), equalTo(COMPARE_EQUAL));
    }
 
@@ -238,6 +257,8 @@ public class PhoneNumberTest
     * the method returns a positive value (greater than 0).
     */
    @Test
+   // Instead of saying, "should be positive value", the test should say why it's a positive value.
+   // For example, a better name would be testPhoneNumberIsLexiallyGreater
    public void test_PhoneNumber_compareTo_positiveValue()
    {
       PhoneNumber p1 = new PhoneNumber(VALID_AREA_CODE, VALID_PREFIX,
@@ -253,6 +274,7 @@ public class PhoneNumberTest
     * the method returns a negative value (less than 0).
     */
    @Test
+   // Same comment as above
    public void test_PhoneNumber_compareTo_negativeValue()
    {
       PhoneNumber p1 = new PhoneNumber(VALID_AREA_CODE, VALID_PREFIX,
@@ -269,6 +291,7 @@ public class PhoneNumberTest
    @Test
    public void test_PhoneNumber_isValidPhoneNumber_true()
    {
+     // Don't know this assertion framework, but I bet there is an assertTrue or something
       assertThat(PhoneNumber.isValidPhoneNumber(VALID_AREA_CODE,
             VALID_PREFIX, VALID_LINE_NUMBER), equalTo(true));
    }
@@ -320,6 +343,7 @@ public class PhoneNumberTest
     * Valid prefix, invalid area code and line number
     */
    @Test
+   // Same comment as above about grouping this validation tests together.
    public void test_isValidPhoneNumber_validPrefix()
    {
       assertThat(PhoneNumber.isValidPhoneNumber(INVALID_AREA_CODE,
